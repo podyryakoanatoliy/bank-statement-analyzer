@@ -41,13 +41,12 @@ const FILTER_OPTIONS = [
 export default function BankStatementAnalyzer() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [notValidRows, setNotValidRows] = useState<NotValidRow[]>([]);
-  const [skippedCount, setSkippedCount] = useState<number>(0);
   const [filter, setFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file || !file.name.endsWith(".csv")) {
+  const handleFile = (file: File) => {
+    if (!file.name.endsWith(".csv")) {
       return alert("Будь ласка, виберіть CSV файл.");
     }
 
@@ -60,11 +59,33 @@ export default function BankStatementAnalyzer() {
 
         setTransactions(validData);
         setNotValidRows(notValid);
-        setSkippedCount(notValid.length);
       },
     });
   };
-  console.log(notValidRows);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) handleFile(file);
+  };
+
+  // Drag-and-Drop handlers
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  };
   const filteredTransactions = useMemo(() => {
     return transactions.filter((t) => {
       const matchesFilter =
@@ -86,19 +107,31 @@ export default function BankStatementAnalyzer() {
     <main className="p-8 max-w-6xl mx-auto space-y-8">
       <h1 className="text-3xl font-bold">Аналізатор виписки</h1>
       {/* ЗАВАНТАЖЕННЯ ФАЙЛУ */}
-      <div className="border-2 border-dashed p-6 text-center rounded-lg bg-slate-50/50">
-        <input
+      <div
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`border-2 border-dashed p-6 text-center rounded-lg transition-colors ${
+          isDragging
+            ? "border-blue-400 bg-blue-50"
+            : "border-slate-200 bg-slate-50/50"
+        }`}
+      >
+        <p className="mb-2">Перетягніть CSV файл сюди або оберіть файл:</p>
+        <Input
           type="file"
           accept=".csv"
           onChange={handleFileUpload}
           className="cursor-pointer"
         />
-        {skippedCount > 0 && (
-          <p className="text-red-500 mt-2 text-sm">
-            Пропущено невалідних рядків: {skippedCount} (перевірте формат даних)
-          </p>
-        )}
       </div>
+
+      {notValidRows.length > 0 && (
+        <p className="text-red-500 mt-2 text-sm">
+          Пропущено невалідних рядків: {notValidRows.length} (перевірте формат
+          даних)
+        </p>
+      )}
 
       {/* КАРТКИ ПІДСУМКІВ */}
       {transactions.length > 0 && (
