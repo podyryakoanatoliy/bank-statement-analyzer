@@ -1,3 +1,4 @@
+import Papa from "papaparse";
 import {
   TransactionSchema,
   type Transaction,
@@ -25,11 +26,34 @@ export const processCsvRows = (
         .join(", ");
 
       notValid.push({
-        row: index + 2,
+        row: index + 1,
         message: errorMsg,
       });
     }
   });
 
   return { validData, notValid };
+};
+
+export const exportTransactionsToCsv = (data: Transaction[]) => {
+  if (data.length === 0) return;
+
+  const csv = Papa.unparse(data);
+
+  const blob = new Blob(["\uFEFF", csv], { type: "text/csv;charset=utf-8;" });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  const fileName = `filtered_statement_${new Date().toISOString().slice(0, 10)}.csv`;
+
+  link.setAttribute("href", url);
+  link.setAttribute("download", fileName);
+  link.style.visibility = "hidden";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
 };
