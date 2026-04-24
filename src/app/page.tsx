@@ -31,11 +31,18 @@ import {
 import { calculateSummary } from "@/lib/statement";
 import { processCsvRows } from "@/lib/parser";
 
+type FilterType = "all" | "income" | "expense";
+const FILTER_OPTIONS = [
+  { value: "all", label: "Усі операції" },
+  { value: "income", label: "Доходи" },
+  { value: "expense", label: "Витрати" },
+] as const;
+
 export default function BankStatementAnalyzer() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [notValidRows, setNotValidRows] = useState<NotValidRow[]>([]);
   const [skippedCount, setSkippedCount] = useState<number>(0);
-  const [filter, setFilter] = useState<"all" | "income" | "expense">("all");
+  const [filter, setFilter] = useState<FilterType>("all");
   const [search, setSearch] = useState("");
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,15 +174,17 @@ export default function BankStatementAnalyzer() {
             />
             <Select
               value={filter}
-              onValueChange={(value: any) => setFilter(value)}
+              onValueChange={(value) => setFilter(value as FilterType)}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Всі транзакції" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Усі</SelectItem>
-                <SelectItem value="income">Доходи</SelectItem>
-                <SelectItem value="expense">Витрати</SelectItem>
+                {FILTER_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

@@ -2,8 +2,8 @@ import { z } from "zod";
 
 export const TransactionSchema = z.object({
   date: z.string().min(1, "Дата обов'язкова"),
-  counterparty: z.string().min(1, "Контрагент обов'язковий"),
-  description: z.string().min(1, "Опис обов'язковий"),
+  counterparty: z.string().min(1),
+  description: z.string().min(1),
   amount: z.preprocess((val) => Number(val), z.number()),
 });
 
