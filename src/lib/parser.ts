@@ -26,7 +26,7 @@ export const processCsvRows = (
         .join(", ");
 
       notValid.push({
-        row: index + 1,
+        row: index + 2,
         message: errorMsg,
       });
     }
