@@ -32,10 +32,10 @@ npm run dev
 - [UI/UX:] - Використано компоненти shadcn-ui для створення сучасного інтерфейсу. Додано підтримку Dark Mode та можливість експорту відфільтрованих даних назад у CSV..
 - [Drag-and-Drop] - Реалізовано зручну зону завантаження файлів для покращення досвіду користувача (UX)..
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠 Технічний стек
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Framework: Next.js 15 (App Router)
+- Language: TypeScript (Strict mode)
+- UI: Tailwind CSS + shadcn/ui
+- Parsing: PapaParse
+- Validation: Zod
