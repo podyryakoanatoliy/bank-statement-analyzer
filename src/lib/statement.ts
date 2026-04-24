@@ -11,7 +11,6 @@ export const calculateSummary = (
     .filter((t) => t.amount < 0)
     .reduce((sum, t) => sum + Math.abs(t.amount), 0);
 
-  // Топ-5 контрагентів за витратами
   const counterpartyMap: Record<string, number> = {};
   transactions
     .filter((t) => t.amount < 0)

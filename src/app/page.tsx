@@ -21,15 +21,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ThemeToggle } from "@/components/ThemeToggle/ThemeToggle";
 
-import {
-  NotValidRow,
-  TransactionSchema,
-  type Transaction,
-} from "@/types/statement";
+import { NotValidRow, type Transaction } from "@/types/statement";
 
 import { calculateSummary } from "@/lib/statement";
-import { processCsvRows } from "@/lib/parser";
+import { processCsvRows, exportTransactionsToCsv } from "@/lib/parser";
+import { Button } from "@/components/ui/button";
+import { Download } from "lucide-react";
 
 type FilterType = "all" | "income" | "expense";
 const FILTER_OPTIONS = [
@@ -106,6 +105,7 @@ export default function BankStatementAnalyzer() {
   return (
     <main className="p-8 max-w-6xl mx-auto space-y-8">
       <h1 className="text-3xl font-bold">Аналізатор виписки</h1>
+      <ThemeToggle />
       {/* ЗАВАНТАЖЕННЯ ФАЙЛУ */}
       <div
         onDragOver={handleDragOver}
@@ -220,6 +220,14 @@ export default function BankStatementAnalyzer() {
                 ))}
               </SelectContent>
             </Select>
+            <Button
+              variant="outline"
+              onClick={() => exportTransactionsToCsv(filteredTransactions)} // передаємо актуальні дані
+              disabled={filteredTransactions.length === 0}
+            >
+              <Download className="mr-2 h-4 w-4" />
+              Експорт CSV
+            </Button>
           </div>
 
           {/* ТРАНЗАКЦІЇ */}
