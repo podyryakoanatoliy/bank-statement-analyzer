@@ -50,7 +50,9 @@ export default function FilterBar({
           onValueChange={(v) => setFilter(v as FilterType)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue />
+            <SelectValue placeholder="Оберіть фільтр">
+              {FILTER_OPTIONS.find((opt) => opt.value === filter)?.label}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {FILTER_OPTIONS.map((opt) => (

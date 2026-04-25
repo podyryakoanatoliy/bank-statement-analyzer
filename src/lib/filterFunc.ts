@@ -9,7 +9,9 @@ export const getFilteredTransactions = (
 
   return transactions.filter((t) => {
     const matchesFilter =
-      filter === "all" || (filter === "income" ? t.amount > 0 : t.amount < 0);
+      filter === "all" ||
+      filter === "" ||
+      (filter === "income" ? t.amount > 0 : t.amount < 0);
 
     const matchesSearch =
       !s ||

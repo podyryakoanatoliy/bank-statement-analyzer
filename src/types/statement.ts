@@ -14,7 +14,7 @@ interface Parties {
   amount: number;
 }
 
-export type FilterType = "all" | "income" | "expense";
+export type FilterType = "all" | "income" | "expense" | "";
 
 export interface StatementSummary {
   totalIncome: number;
