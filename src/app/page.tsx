@@ -20,7 +20,7 @@ export default function BankStatementAnalyzer() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [notValidRows, setNotValidRows] = useState<NotValidRow[]>([]);
 
-  const [filter, setFilter] = useState<FilterType>("all");
+  const [filter, setFilter] = useState<FilterType>("");
   const [search, setSearch] = useState<string>("");
 
   const filteredTransactions = useMemo(
@@ -38,8 +38,8 @@ export default function BankStatementAnalyzer() {
 
       {/* ЗАВАНТАЖЕННЯ ФАЙЛУ */}
       <DownloadFile
-        saveValidData={setTransactions}
         saveNotValidData={setNotValidRows}
+        saveValidData={setTransactions}
         notValidData={notValidRows}
       />
 
